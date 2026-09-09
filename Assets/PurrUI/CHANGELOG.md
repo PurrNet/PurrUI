@@ -1,3 +1,10 @@
+# [1.6.0-beta.1](https://github.com/PurrNet/PurrUI/compare/v1.5.2...v1.6.0-beta.1) (2026-09-09)
+
+
+### Features
+
+* new theme toggles and migrate every HeroUI element to use the themes ([fede049](https://github.com/PurrNet/PurrUI/commit/fede04988d87bcccc5e555ce55792c4737e894e4))
+
 ## [1.5.2](https://github.com/PurrNet/PurrUI/compare/v1.5.1...v1.5.2) (2026-08-25)
 
 
