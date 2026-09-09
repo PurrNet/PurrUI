@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/PurrNet/PurrUI/compare/v1.5.1...v1.5.2) (2026-08-25)
+
+
+### Bug Fixes
+
+* regression ([7827ac5](https://github.com/PurrNet/PurrUI/commit/7827ac53935a3b94ab04415529bdbba5a174c74e))
+
 ## [1.5.2-beta.1](https://github.com/PurrNet/PurrUI/compare/v1.5.1...v1.5.2-beta.1) (2026-08-25)
 
 
