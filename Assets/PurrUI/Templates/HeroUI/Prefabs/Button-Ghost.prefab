@@ -9,23 +9,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1481954308891553432, guid: b968de9f34a16e54e94710178af0821a, type: 3}
-      propertyPath: _backgroundHover.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481954308891553432, guid: b968de9f34a16e54e94710178af0821a, type: 3}
-      propertyPath: _backgroundHover.b
-      value: 0.21960784
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481954308891553432, guid: b968de9f34a16e54e94710178af0821a, type: 3}
-      propertyPath: _backgroundHover.g
-      value: 0.21568628
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481954308891553432, guid: b968de9f34a16e54e94710178af0821a, type: 3}
-      propertyPath: _backgroundHover.r
-      value: 0.21568628
-      objectReference: {fileID: 0}
-    - target: {fileID: 1481954308891553432, guid: b968de9f34a16e54e94710178af0821a, type: 3}
-      propertyPath: _backgroundNormal.a
+      propertyPath: _normalOpacity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2761595020839450789, guid: b968de9f34a16e54e94710178af0821a, type: 3}
@@ -138,6 +122,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6908238467753847113, guid: b968de9f34a16e54e94710178af0821a, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8063995292643607498, guid: b968de9f34a16e54e94710178af0821a, type: 3}
+      propertyPath: _normalOpacity
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

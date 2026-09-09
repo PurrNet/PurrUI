@@ -27,3 +27,22 @@ MonoBehaviour:
   _warningForeground: {r: 0.09411766, g: 0.09411766, b: 0.10588236, a: 1}
   _danger: {r: 0.8588236, g: 0.23137257, b: 0.24313727, a: 1}
   _dangerForeground: {r: 0.98823535, g: 0.98823535, b: 0.98823535, a: 1}
+  _styles:
+    buttonRoundness:
+      full: 1
+      pixels: 0
+    panelRoundness:
+      full: 0
+      pixels: 16
+    inputRoundness:
+      full: 0
+      pixels: 10
+    itemRoundness:
+      full: 0
+      pixels: 16
+    buttonTransitionDuration: 0.2
+    buttonDisabledOpacity: 0.5
+    buttonPressedScale: 0.99
+    toggleTransitionDuration: 0.1
+    inputTransitionDuration: 0.15
+    inputFocusWidth: 2

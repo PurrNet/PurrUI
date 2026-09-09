@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 922378954801938397}
   - component: {fileID: 2306979484623376675}
   - component: {fileID: 2749052429146863248}
+  - component: {fileID: 5746446217622957760}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -137,6 +138,25 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5746446217622957760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4036557668757314271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb72760b3a784ab0a7cb7240f37f860c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ColoredGraphic
+  _graphic: {fileID: 2749052429146863248}
+  _transitionDuration: 0.1
+  _color:
+    enabled: 1
+    color: 1
+    contrast: 1
+  _coloredInfos: []
 --- !u!1 &6219443428103735263
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +224,10 @@ GameObject:
   - component: {fileID: 7398320065705135307}
   - component: {fileID: 2740710997828564871}
   - component: {fileID: 6634450283496151880}
+  - component: {fileID: 5340177416681595043}
+  - component: {fileID: 96346931260301451}
+  - component: {fileID: 3329940865266103631}
+  - component: {fileID: 5621441853631677094}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -312,6 +336,7 @@ MonoBehaviour:
   _embossStrength: 0.5
   _embossHighlightColor: {r: 1, g: 1, b: 1, a: 1}
   _embossShadowColor: {r: 0, g: 0, b: 0, a: 1}
+  _roundnessRole: 3
   _useMaxRoundness: 0
   _uniformRoundness: 1
   _roundnessInPixels: {x: 10, y: 10, z: 10, w: 10}
@@ -447,7 +472,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bedb6fc38647bd946b0aba6e5c13d18a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: PurrLobby.Runtime::PurrLobby.SelectedOutline
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.SelectedOutlineInputField
   _input: {fileID: 1770624670841886758}
   _graphic: {fileID: 7762153034736561099}
   _transitionCurve:
@@ -475,6 +500,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _outlineColor: {r: 0.015686275, g: 0.52156866, b: 0.96862745, a: 1}
+  _useThemeTransition: 1
+  _useThemeFocusWidth: 1
   _outlineWidth: 2
   _outlineWidthNotSelected: 0
   _transitionDuration: 0.15
@@ -490,11 +517,126 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df50b8c11070da042bfb67716b57cd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: PurrLobby.Runtime::PurrLobby.ClickSounds
-  _clickSounds:
-  - {fileID: 8300000, guid: 24300c13439bdc34ba6a448b09876de8, type: 3}
-  - {fileID: 8300000, guid: 0f09be60e6734a54bb3ddf2e8581e374, type: 3}
-  - {fileID: 8300000, guid: 10c49e10c6d59ca4b86070f3374b69ff, type: 3}
-  - {fileID: 8300000, guid: 3da018ea9941fab498be0a1753490ef2, type: 3}
+  _clickSound: {fileID: 0}
+--- !u!114 &5340177416681595043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939607101648543798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e562379be3a47f79278a3244f0ebbb2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ThemedInputOutline
+  _outline: {fileID: 2740710997828564871}
+  _graphic: {fileID: 7762153034736561099}
+  _color:
+    enabled: 1
+    color: 0
+    contrast: 0
+  _input: {fileID: 1770624670841886758}
+  _selectionColor:
+    enabled: 1
+    color: 0
+    contrast: 0
+  _selectionTone:
+    shade:
+      enabled: 1
+      color: 0
+      contrast: 1
+    blend: 0.64316416
+  _selectionOpacity: 0.7529412
+--- !u!114 &96346931260301451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939607101648543798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb72760b3a784ab0a7cb7240f37f860c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ColoredGraphic
+  _graphic: {fileID: 7762153034736561099}
+  _transitionDuration: 0.1
+  _color:
+    enabled: 0
+    color: 7
+    contrast: 0
+  _coloredInfos:
+  - enabled: 1
+    color: 1
+    contrast: 0
+  - enabled: 1
+    color: 7
+    contrast: 0
+  - enabled: 0
+    color: 7
+    contrast: 0
+  - enabled: 0
+    color: 6
+    contrast: 0
+  - enabled: 1
+    color: 7
+    contrast: 0
+  - enabled: 0
+    color: 6
+    contrast: 0
+--- !u!114 &3329940865266103631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939607101648543798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d83035f59de044fc97ddadad4a295e61, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ThemedGraphicTone
+  _graphic: {fileID: 7762153034736561099}
+  _slot: 3
+  _color:
+    enabled: 1
+    color: 6
+    contrast: 0
+  _tone:
+    shade:
+      enabled: 0
+      color: 0
+      contrast: 0
+    blend: 0
+  _brightness: 0
+  _opacity: 1
+--- !u!114 &5621441853631677094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939607101648543798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d83035f59de044fc97ddadad4a295e61, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ThemedGraphicTone
+  _graphic: {fileID: 7762153034736561099}
+  _slot: 5
+  _color:
+    enabled: 1
+    color: 6
+    contrast: 0
+  _tone:
+    shade:
+      enabled: 0
+      color: 0
+      contrast: 0
+    blend: 0
+  _brightness: 0
+  _opacity: 1
 --- !u!1 &7959243466558738235
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,6 +649,7 @@ GameObject:
   - component: {fileID: 1157565927244773885}
   - component: {fileID: 8918815947643759364}
   - component: {fileID: 3233923198884752051}
+  - component: {fileID: 1660889900655075699}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -653,3 +796,22 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1660889900655075699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7959243466558738235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb72760b3a784ab0a7cb7240f37f860c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ColoredGraphic
+  _graphic: {fileID: 8918815947643759364}
+  _transitionDuration: 0.1
+  _color:
+    enabled: 1
+    color: 8
+    contrast: 0
+  _coloredInfos: []

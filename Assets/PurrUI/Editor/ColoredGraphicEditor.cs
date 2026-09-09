@@ -69,7 +69,7 @@ namespace PurrNet.Editor.UI
             for (int i = 0; i < keys.Length; i++)
             {
                 var element = _coloredInfosProp.GetArrayElementAtIndex(i);
-                var label = new GUIContent($"[{i}] {keys[i]}", $"Index {i} — use SetColor({i}, ...) at runtime.");
+                var label = new GUIContent(keys[i]);
                 EditorGUILayout.PropertyField(element, label, true);
             }
         }

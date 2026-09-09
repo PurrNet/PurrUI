@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5040737113958996952}
   - component: {fileID: 5579443877015346409}
   - component: {fileID: 8859756083255496746}
+  - component: {fileID: 144364927656772408}
   m_Layer: 5
   m_Name: Label-Sub
   m_TagString: Untagged
@@ -137,3 +138,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &144364927656772408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8967047083258821514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb72760b3a784ab0a7cb7240f37f860c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ColoredGraphic
+  _graphic: {fileID: 8859756083255496746}
+  _transitionDuration: 0.1
+  _color:
+    enabled: 1
+    color: 8
+    contrast: 0
+  _coloredInfos: []

@@ -28,10 +28,23 @@ namespace PurrNet.UI
         [SerializeField] private Color _danger = new Color(0.6470588f, 0.1647059f, 0.1647059f, 1f);
         [SerializeField] private Color _dangerForeground = Color.white;
 
+        [Header("Default Styles")]
+        [Tooltip("Shared styling for elements using theme defaults. Custom element settings remain local.")]
+        [SerializeField] private ThemeStyles _styles = ThemeStyles.Default;
+
+        public ThemeStyles styles => _styles;
+
         public event Action onChange;
 
         private void OnValidate()
         {
+            _styles = _styles.Sanitize();
+            onChange?.Invoke();
+        }
+
+        public void SetStyles(ThemeStyles value)
+        {
+            _styles = value.Sanitize();
             onChange?.Invoke();
         }
 

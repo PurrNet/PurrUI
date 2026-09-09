@@ -124,6 +124,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _hoverTone.blend
+      value: 0.13543549
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _hoverColor.color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalTone.blend
+      value: 0.065903105
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalColor.color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _hoverTone.shade.color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalTone.shade.color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalTone.shade.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746333190051604185, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalTone.shade.contrast
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4380364288145639336, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
       propertyPath: m_fontColor.b
       value: 0.9686275
@@ -140,29 +172,49 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4294411524
       objectReference: {fileID: 0}
-    - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
-      propertyPath: _backgroundHover.b
-      value: 0.22
+    - target: {fileID: 4830177907110414792, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _color.color
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4830177907110414792, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _color.contrast
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
-      propertyPath: _backgroundHover.g
-      value: 0.2145
+      propertyPath: _hoverTone.blend
+      value: 0.13543549
       objectReference: {fileID: 0}
     - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
-      propertyPath: _backgroundHover.r
-      value: 0.2145
+      propertyPath: _hoverColor.color
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
-      propertyPath: _backgroundNormal.b
-      value: 0.15686275
+      propertyPath: _normalTone.blend
+      value: 0.065903105
       objectReference: {fileID: 0}
     - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
-      propertyPath: _backgroundNormal.g
-      value: 0.15294118
+      propertyPath: _normalColor.color
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
-      propertyPath: _backgroundNormal.r
-      value: 0.15294118
+      propertyPath: _hoverTone.shade.color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalTone.shade.color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalTone.shade.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5225375435750034315, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _normalTone.shade.contrast
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061296838883312040, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
+      propertyPath: _coloredInfos.Array.data[0].color
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8811185862187851190, guid: 3c7732e97ea5dae49837235e47ad699c, type: 3}
       propertyPath: m_Name
