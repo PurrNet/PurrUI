@@ -265,6 +265,25 @@ Color Palette Scriptable Object:
 
 The inspector includes a live mock-UI preview built from rectangles so you can see how the slots land together as you tweak them - useful for catching low-contrast pairings at a glance.
 
+## Shape and interaction styles
+
+Each palette also contains **Styles** for button, panel, input and item roundness, button/toggle/input transition durations, disabled button opacity, pressed button scale, and focused input outline width. HeroUI source prefabs inherit these settings by default. The supplied defaults preserve HeroUI's pill buttons, 16 px panels and 10 px inputs.
+
+On a `RectangleGraphic`, select a **Roundness Role** to inherit the corresponding theme value. **Custom** retains the local maximum, uniform or individual corner settings. Full roundness follows the element's size, while pixel roundness stays fixed. Circular icons, tracks and existing explicit prefab overrides retain their local shape. Control inspectors expose **From Theme** checkboxes; turn one off to customize that value for a single element.
+
+Styles use the same `PaletteProvider`/`ViewStack` hierarchy as colors. Edit the palette asset to update its users, or update a copy at runtime:
+
+```csharp
+var styles = palette.styles;
+styles.buttonRoundness = CornerRoundness.Pixels(12f);
+styles.panelRoundness = CornerRoundness.Pixels(20f);
+styles.buttonTransitionDuration = 0.1f;
+styles.inputFocusWidth = 3f;
+palette.SetStyles(styles);
+```
+
+`SetStyles` notifies existing users. Running transitions keep their progress, and local overrides remain intact. These APIs and controls live in the core `PurrNet.UI` namespace.
+
 ## ColoredGraphic
 
 Add a `ColoredGraphic` next to any `UI.Graphic` (`Image`, `RawImage`, `TMP_Text`, etc.) to drive its color from the active palette.

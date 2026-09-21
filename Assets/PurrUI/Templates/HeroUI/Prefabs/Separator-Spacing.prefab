@@ -82,7 +82,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6991139683532003034, guid: a85d76c5eab4fca4a851fc0884202b7f, type: 3}
       propertyPath: m_Name
-      value: Separator-Spacing Variant
+      value: Separator-Spacing
       objectReference: {fileID: 0}
     - target: {fileID: 8476920003869711243, guid: a85d76c5eab4fca4a851fc0884202b7f, type: 3}
       propertyPath: m_Pivot.x

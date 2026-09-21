@@ -3,7 +3,9 @@
     "rootNamespace": "PurrNet.UI.Tests",
     "references": [
         "PurrUI.Runtime",
+        "PurrUI.HeroUI.Runtime",
         "Unity.TextMeshPro",
+        "UnityEngine.UI",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

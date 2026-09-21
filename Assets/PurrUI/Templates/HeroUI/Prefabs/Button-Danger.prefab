@@ -12,29 +12,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button-Danger
       objectReference: {fileID: 0}
-    - target: {fileID: 4093494571155517460, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
-      propertyPath: _backgroundHover.b
-      value: 0.4220439
+    - target: {fileID: 1276072071564278327, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
+      propertyPath: _coloredInfos.Array.data[0].color
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3693934584037749335, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
+      propertyPath: _color.color
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4093494571155517460, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
-      propertyPath: _backgroundHover.g
-      value: 0.411
+      propertyPath: _hoverTone.blend
+      value: 0.25116724
       objectReference: {fileID: 0}
     - target: {fileID: 4093494571155517460, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
-      propertyPath: _backgroundHover.r
-      value: 1
+      propertyPath: _hoverColor.color
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4093494571155517460, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
-      propertyPath: _backgroundNormal.b
-      value: 0.24313726
+      propertyPath: _normalColor.color
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4093494571155517460, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
-      propertyPath: _backgroundNormal.g
-      value: 0.23137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 4093494571155517460, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
-      propertyPath: _backgroundNormal.r
-      value: 0.85882354
+      propertyPath: _hoverTone.shade.color
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7459676452420432120, guid: 6491b392ffebc374e935777cfd3f45a4, type: 3}
       propertyPath: m_Pivot.x

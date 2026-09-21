@@ -207,18 +207,7 @@ namespace PurrNet.UI
             {
                 float sw = _source.rectTransform.rect.width + _extraSize * 2f;
                 float sh = _source.rectTransform.rect.height + _extraSize * 2f;
-                float maxR = Mathf.Min(sw, sh) * 0.5f;
-
-                if (_source.useMaxRoundness)
-                    return new Vector4(maxR, maxR, maxR, maxR);
-
-                if (_source.uniformRoundness)
-                {
-                    float r = _source.roundnessInPixels.x;
-                    return new Vector4(r, r, r, r);
-                }
-
-                return _source.roundnessInPixels;
+                return _source.ResolveRoundness(sw, sh);
             }
 
             float width = rectTransform.rect.width;

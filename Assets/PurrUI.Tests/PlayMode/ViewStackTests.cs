@@ -70,7 +70,7 @@ namespace PurrNet.UI.Tests
         public void Push_NullPrefab_LogsErrorAndReturnsNull()
         {
             LogAssert.Expect(LogType.Error, new Regex("prefab is null"));
-            Assert.IsNull(_stack.Push(null));
+            Assert.IsNull(_stack.Push<MonoView>(null));
             Assert.AreEqual(0, _stack.count);
         }
 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2803627075399144257}
   - component: {fileID: 3506216303769927706}
-  - component: {fileID: 3401848211591476803}
+  - component: {fileID: 1504030189360534215}
   m_Layer: 5
   m_Name: InputField-Labeled
   m_TagString: Untagged
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &3401848211591476803
+--- !u!114 &1504030189360534215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -75,10 +75,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7199729687095583578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 454c6981c417b554aa6a3e0812c219c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 991aef4382fa452cab2c98978c0c60f1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: PurrLobby.Runtime::PurrLobby.InputFieldMandatory
-  _isMandatory: 1
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ThemedInputFieldMandatory
   _inputField: {fileID: 7393593378494793832}
   _graphic: {fileID: 6341387001695954889}
   _label: {fileID: 5062939318979778373}
@@ -110,10 +109,27 @@ MonoBehaviour:
   _transitionDuration: 0.2
   _minOutline: 0
   _minOutlineError: 1
-  _textColor: {r: 1, g: 1, b: 1, a: 1}
-  _errorTextColor: {r: 0.8588236, g: 0.23137257, b: 0.24313727, a: 1}
-  _outlineColor: {r: 0.015686275, g: 0.52156866, b: 0.9686275, a: 1}
-  _errorOutlineColor: {r: 0.85882354, g: 0.23137255, b: 0.24313726, a: 1}
+  _textColor:
+    enabled: 1
+    color: 1
+    contrast: 1
+  _errorTextColor:
+    enabled: 1
+    color: 4
+    contrast: 0
+  _outlineColor:
+    enabled: 1
+    color: 0
+    contrast: 0
+  _errorOutlineColor:
+    enabled: 1
+    color: 4
+    contrast: 0
+  _requiredMarkerColor:
+    enabled: 1
+    color: 4
+    contrast: 0
+  _labelFormat: Your email <color=#{0}>*</color>
 --- !u!1001 &4374966984919025519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,6 +138,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2803627075399144257}
     m_Modifications:
+    - target: {fileID: 375555912367545930, guid: cde3956384d4b694a83f0fc7898d2ffd, type: 3}
+      propertyPath: _color.color
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5040737113958996952, guid: cde3956384d4b694a83f0fc7898d2ffd, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -204,7 +224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8859756083255496746, guid: cde3956384d4b694a83f0fc7898d2ffd, type: 3}
       propertyPath: m_text
-      value: Your email <color=red>*</color>
+      value: Your email <color=#DB3B3EFF>*</color>
       objectReference: {fileID: 0}
     - target: {fileID: 8967047083258821514, guid: cde3956384d4b694a83f0fc7898d2ffd, type: 3}
       propertyPath: m_Name
@@ -239,6 +259,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2803627075399144257}
     m_Modifications:
+    - target: {fileID: 144364927656772408, guid: 8e44e060b9566d54faf5cbc7afc93813, type: 3}
+      propertyPath: _color.color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 144364927656772408, guid: 8e44e060b9566d54faf5cbc7afc93813, type: 3}
+      propertyPath: _color.contrast
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5040737113958996952, guid: 8e44e060b9566d54faf5cbc7afc93813, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -476,7 +504,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bedb6fc38647bd946b0aba6e5c13d18a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: PurrLobby.Runtime::PurrLobby.SelectedOutline
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.SelectedOutlineInputField
 --- !u!114 &7393593378494793832 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1770624670841886758, guid: d02123be3806c174f896ced5c19f5d17, type: 3}

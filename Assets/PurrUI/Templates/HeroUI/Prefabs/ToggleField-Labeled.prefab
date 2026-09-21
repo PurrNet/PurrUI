@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1349440665446785691}
   - component: {fileID: 1538481906755549541}
   - component: {fileID: 6491732472743320937}
+  - component: {fileID: 7783669703184627300}
   m_Layer: 5
   m_Name: Label-Sub
   m_TagString: Untagged
@@ -137,6 +138,25 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7783669703184627300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537619157721575626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb72760b3a784ab0a7cb7240f37f860c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ColoredGraphic
+  _graphic: {fileID: 6491732472743320937}
+  _transitionDuration: 0.1
+  _color:
+    enabled: 1
+    color: 8
+    contrast: 0
+  _coloredInfos: []
 --- !u!1 &2068561301589688480
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +169,7 @@ GameObject:
   - component: {fileID: 5759388869233653364}
   - component: {fileID: 2081828309970924136}
   - component: {fileID: 5174428824100797442}
+  - component: {fileID: 1030576689896368998}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -288,6 +309,25 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1030576689896368998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068561301589688480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb72760b3a784ab0a7cb7240f37f860c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ColoredGraphic
+  _graphic: {fileID: 5174428824100797442}
+  _transitionDuration: 0.1
+  _color:
+    enabled: 1
+    color: 5
+    contrast: 1
+  _coloredInfos: []
 --- !u!1 &6001407450152094018
 GameObject:
   m_ObjectHideFlags: 0

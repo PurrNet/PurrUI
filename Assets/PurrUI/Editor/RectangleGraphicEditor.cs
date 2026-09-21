@@ -8,6 +8,7 @@ namespace PurrNet.Editor.UI
     public class RectangleGraphicEditor : UnityEditor.Editor
     {
         // Shape
+        SerializedProperty _roundnessRole;
         SerializedProperty _useMaxRoundness;
         SerializedProperty _uniformRoundness;
         SerializedProperty _roundnessInPixels;
@@ -52,6 +53,7 @@ namespace PurrNet.Editor.UI
 
         void OnEnable()
         {
+            _roundnessRole = serializedObject.FindProperty("_roundnessRole");
             _useMaxRoundness = serializedObject.FindProperty("_useMaxRoundness");
             _uniformRoundness = serializedObject.FindProperty("_uniformRoundness");
             _roundnessInPixels = serializedObject.FindProperty("_roundnessInPixels");
@@ -124,28 +126,42 @@ namespace PurrNet.Editor.UI
 
             // Shape
             BeginSection("Shape");
-            EditorGUILayout.PropertyField(_useMaxRoundness);
+            EditorGUILayout.PropertyField(_roundnessRole, new GUIContent("Roundness"));
 
-            if (!_useMaxRoundness.boolValue)
+            if ((RoundnessRole)_roundnessRole.enumValueIndex == RoundnessRole.Custom)
             {
-                EditorGUILayout.PropertyField(_uniformRoundness);
+                EditorGUILayout.PropertyField(_useMaxRoundness);
 
-                if (_uniformRoundness.boolValue)
+                if (!_useMaxRoundness.boolValue)
                 {
-                    var v = _roundnessInPixels.vector4Value;
-                    float val = EditorGUILayout.FloatField("Roundness", v.x);
-                    if (!Mathf.Approximately(val, v.x))
-                        _roundnessInPixels.vector4Value = new Vector4(val, val, val, val);
+                    EditorGUILayout.PropertyField(_uniformRoundness);
+
+                    if (_uniformRoundness.boolValue)
+                    {
+                        var v = _roundnessInPixels.vector4Value;
+                        float val = EditorGUILayout.FloatField("Roundness", v.x);
+                        if (!Mathf.Approximately(val, v.x))
+                            _roundnessInPixels.vector4Value = new Vector4(val, val, val, val);
+                    }
+                    else
+                    {
+                        var v = _roundnessInPixels.vector4Value;
+                        v.z = EditorGUILayout.FloatField("Top Left", v.z);
+                        v.x = EditorGUILayout.FloatField("Top Right", v.x);
+                        v.y = EditorGUILayout.FloatField("Bottom Right", v.y);
+                        v.w = EditorGUILayout.FloatField("Bottom Left", v.w);
+                        _roundnessInPixels.vector4Value = v;
+                    }
                 }
-                else
-                {
-                    var v = _roundnessInPixels.vector4Value;
-                    v.z = EditorGUILayout.FloatField("Top Left", v.z);
-                    v.x = EditorGUILayout.FloatField("Top Right", v.x);
-                    v.y = EditorGUILayout.FloatField("Bottom Right", v.y);
-                    v.w = EditorGUILayout.FloatField("Bottom Left", v.w);
-                    _roundnessInPixels.vector4Value = v;
-                }
+            }
+            else
+            {
+                var graphic = (RectangleGraphic)target;
+                var palette = graphic.GetComponentInParent<IPaletteProvider>(true)?.palette;
+                EditorGUILayout.HelpBox(palette
+                    ? "Uses the " + _roundnessRole.enumDisplayNames[_roundnessRole.enumValueIndex] + " roundness from " + palette.name + "."
+                    : "Uses the nearest palette's default styles. Local corners are retained as the fallback when no palette is available.",
+                    MessageType.Info);
             }
 
             EditorGUILayout.PropertyField(_noFill, new GUIContent("No Fill"));

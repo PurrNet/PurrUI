@@ -1,11 +1,13 @@
+using UnityEngine.Scripting.APIUpdating;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace PurrNet.UI.HeroUI
+namespace PurrNet.UI
 {
     [ExecuteInEditMode]
-    public class ToggleElement : MonoBehaviour, IPointerClickHandler
+    [MovedFrom(true, "PurrNet.UI.HeroUI", "PurrUI.HeroUI.Runtime", "ToggleElement")]
+    public class ToggleElement : ThemeBinding, IPointerClickHandler
     {
         [SerializeField] private bool _value = false;
         [Space]
@@ -17,6 +19,7 @@ namespace PurrNet.UI.HeroUI
         [SerializeField] Color _backgroundOff = Color.gray;
         [SerializeField] Vector2 _leftnobPosition = new Vector2(-0.5f, 0);
         [SerializeField] Vector2 _rightNobPosition = new Vector2(0.5f, 0);
+        [SerializeField] private bool _useThemeTransition;
         [SerializeField] float _transitionDuration = 0.2f;
         [Space]
         [SerializeField] private AudioClip[] _enableSound, _disableSound;
@@ -28,9 +31,28 @@ namespace PurrNet.UI.HeroUI
         private bool _lastValue = false;
 #endif
 
-        private void Awake()
+        private bool _timingInitialized;
+        private float _lastTransitionDuration;
+        public bool useThemeTransition
         {
-            _timeSinceToggle = _transitionDuration;
+            get => _useThemeTransition;
+            set { _useThemeTransition = value; RefreshTransitionDuration(); }
+        }
+        public float transitionDuration => _useThemeTransition && palette ? palette.styles.toggleTransitionDuration : Mathf.Max(0f, _transitionDuration);
+
+        private void Awake() => RefreshTransitionDuration();
+        protected override void ApplyPalette() => RefreshTransitionDuration();
+        private void RefreshTransitionDuration()
+        {
+            var duration = transitionDuration;
+            if (!_timingInitialized)
+            {
+                _timingInitialized = true;
+                _timeSinceToggle = duration;
+            }
+            else if (!Mathf.Approximately(duration, _lastTransitionDuration))
+                _timeSinceToggle = ThemeAnimation.Retime(_timeSinceToggle, _lastTransitionDuration, duration);
+            _lastTransitionDuration = duration;
         }
 
         public bool value
@@ -54,8 +76,9 @@ namespace PurrNet.UI.HeroUI
         }
 
 #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
             if (!Application.isPlaying && _value != _lastValue)
             {
                 OnValueChanged();
@@ -68,13 +91,20 @@ namespace PurrNet.UI.HeroUI
             value = !value;
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+            UpdateVisuals(Time.deltaTime);
+        }
+
+        private void UpdateVisuals(float deltaTime)
+        {
+            RefreshTransitionDuration();
             if (!_background || !_nob)
                 return;
 
-            float lerp = Mathf.Clamp01(_timeSinceToggle / _transitionDuration);
-            lerp = _transitionCurve.Evaluate(lerp);
+            float lerp = _lastTransitionDuration <= 0f ? 1f : Mathf.Clamp01(_timeSinceToggle / _lastTransitionDuration);
+            if (_lastTransitionDuration > 0f && _transitionCurve != null) lerp = _transitionCurve.Evaluate(lerp);
 
             var targetColor = _value ? _backgroundOn : _backgroundOff;
             var fromColor = _value ? _backgroundOff : _backgroundOn;
@@ -84,8 +114,8 @@ namespace PurrNet.UI.HeroUI
             _background.color = Color.Lerp(fromColor, targetColor, lerp);
             _nob.transform.localPosition = Vector3.Lerp(fromPosition, targetPosition, lerp);
 
-            if (_timeSinceToggle <= _transitionDuration)
-                _timeSinceToggle += Time.deltaTime;
+            if (_timeSinceToggle <= _lastTransitionDuration)
+                _timeSinceToggle += deltaTime;
         }
 
         public void OnPointerClick(PointerEventData eventData)

@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 3414069476901665988}
   - component: {fileID: 8189202781020522283}
   - component: {fileID: 5719990402869331596}
+  - component: {fileID: 7103382936186894534}
+  - component: {fileID: 1502899529616741696}
+  - component: {fileID: 1438323360655557193}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -120,6 +123,7 @@ MonoBehaviour:
   _embossStrength: 0.5
   _embossHighlightColor: {r: 1, g: 1, b: 1, a: 1}
   _embossShadowColor: {r: 0, g: 0, b: 0, a: 1}
+  _roundnessRole: 2
   _useMaxRoundness: 0
   _uniformRoundness: 1
   _roundnessInPixels: {x: 16, y: 16, z: 16, w: 16}
@@ -169,3 +173,92 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!114 &7103382936186894534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438791047168191671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb72760b3a784ab0a7cb7240f37f860c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ColoredGraphic
+  _graphic: {fileID: 3414069476901665988}
+  _transitionDuration: 0.1
+  _color:
+    enabled: 0
+    color: 7
+    contrast: 0
+  _coloredInfos:
+  - enabled: 1
+    color: 1
+    contrast: 0
+  - enabled: 1
+    color: 7
+    contrast: 0
+  - enabled: 1
+    color: 5
+    contrast: 0
+  - enabled: 0
+    color: 6
+    contrast: 0
+  - enabled: 1
+    color: 7
+    contrast: 0
+  - enabled: 0
+    color: 6
+    contrast: 0
+--- !u!114 &1502899529616741696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438791047168191671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d83035f59de044fc97ddadad4a295e61, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ThemedGraphicTone
+  _graphic: {fileID: 3414069476901665988}
+  _slot: 3
+  _color:
+    enabled: 1
+    color: 6
+    contrast: 0
+  _tone:
+    shade:
+      enabled: 0
+      color: 0
+      contrast: 0
+    blend: 0
+  _brightness: 0
+  _opacity: 1
+--- !u!114 &1438323360655557193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438791047168191671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d83035f59de044fc97ddadad4a295e61, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: PurrUI.Runtime::PurrNet.UI.ThemedGraphicTone
+  _graphic: {fileID: 3414069476901665988}
+  _slot: 5
+  _color:
+    enabled: 1
+    color: 6
+    contrast: 0
+  _tone:
+    shade:
+      enabled: 0
+      color: 0
+      contrast: 0
+    blend: 0
+  _brightness: 0
+  _opacity: 1
