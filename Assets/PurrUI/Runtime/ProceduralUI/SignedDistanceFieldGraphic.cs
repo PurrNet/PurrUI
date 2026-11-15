@@ -27,6 +27,20 @@ namespace PurrNet.UI
         Outside
     }
 
+    /// <summary>Which image a graphic draws. Texture is the default, so graphics saved before sprites existed are unchanged.</summary>
+    public enum ImageSource
+    {
+        Texture,
+        Sprite
+    }
+
+    /// <summary>How a sprite is drawn, matching the Simple and Sliced types of a UI Image.</summary>
+    public enum SpriteImageType
+    {
+        Simple,
+        Sliced
+    }
+
     [RequireComponent(typeof(CanvasRenderer))]
     public class SignedDistanceFieldGraphic : MaskableGraphic, IColored
     {
@@ -35,6 +49,16 @@ namespace PurrNet.UI
         [SerializeField, HideInInspector] Shader _shader;
 
         [SerializeField] Texture _texture;
+        [Tooltip("Which of the two images below is drawn. Both stay assigned when you switch.")]
+        [SerializeField] ImageSource _imageSource;
+        [Tooltip("Drawn when Source is Sprite, using the sprite's atlas rect and nine-slice borders.")]
+        [SerializeField] Sprite _sprite;
+        [Tooltip("Simple stretches the whole sprite. Sliced keeps its borders and stretches only the centre.")]
+        [SerializeField] SpriteImageType _imageType;
+        [Tooltip("Sliced only. Turn off to draw just the borders.")]
+        [SerializeField] bool _fillCenter = true;
+        [Tooltip("Scales the sprite's nine-slice borders, like Pixels Per Unit Multiplier on a UI Image.")]
+        [SerializeField, Min(0.01f)] float _pixelsPerUnitMultiplier = 1f;
         [SerializeField] Color _graphicColor = Color.white;
         [SerializeField] GradientType _gradientType;
         [SerializeField] Color _gradientColor = Color.white;
@@ -81,6 +105,53 @@ namespace PurrNet.UI
         {
             get => _texture;
             set { if (_texture == value) return; _texture = value; SetVerticesDirty(); SetMaterialDirty(); }
+        }
+
+        /// <summary>
+        /// Optional sprite drawn instead of <see cref="texture"/>. Sprites from an atlas use their own
+        /// rect, and sprites with borders are nine-sliced.
+        /// </summary>
+        public Sprite sprite
+        {
+            get => _sprite;
+            set { if (_sprite == value) return; _sprite = value; SetVerticesDirty(); SetMaterialDirty(); }
+        }
+
+        /// <summary>
+        /// Whether <see cref="texture"/> or <see cref="sprite"/> is drawn. The other one stays assigned,
+        /// so assigning a sprite from code also needs this set to <see cref="ImageSource.Sprite"/>.
+        /// </summary>
+        public ImageSource imageSource
+        {
+            get => _imageSource;
+            set { if (_imageSource == value) return; _imageSource = value; SetVerticesDirty(); SetMaterialDirty(); }
+        }
+
+        /// <summary>Whether <see cref="sprite"/> is stretched whole or nine-sliced by its borders.</summary>
+        public SpriteImageType imageType
+        {
+            get => _imageType;
+            set { if (_imageType == value) return; _imageType = value; SetMaterialDirty(); }
+        }
+
+        /// <summary>For a sliced <see cref="sprite"/>: false draws only its borders.</summary>
+        public bool fillCenter
+        {
+            get => _fillCenter;
+            set { if (_fillCenter == value) return; _fillCenter = value; SetMaterialDirty(); }
+        }
+
+        /// <summary>Scales the nine-slice borders of <see cref="sprite"/>. Higher values make them thinner.</summary>
+        public float pixelsPerUnitMultiplier
+        {
+            get => _pixelsPerUnitMultiplier;
+            set
+            {
+                value = Mathf.Max(0.01f, value);
+                if (Mathf.Approximately(_pixelsPerUnitMultiplier, value)) return;
+                _pixelsPerUnitMultiplier = value;
+                SetMaterialDirty();
+            }
         }
 
         public Color graphicColor
@@ -229,7 +300,18 @@ namespace PurrNet.UI
 
         float extraMargin => _outlineSize + FrameOutwardExtension + _shadowSize + _shadowBlur + 1f;
 
-        public override Texture mainTexture => _texture ? _texture : s_WhiteTexture;
+        // False while the sprite's texture is not available yet (an atlas that has not loaded).
+        bool hasUsableSprite => _imageSource == ImageSource.Sprite && _sprite && _sprite.texture;
+
+        public override Texture mainTexture
+        {
+            get
+            {
+                if (_imageSource == ImageSource.Sprite)
+                    return hasUsableSprite ? _sprite.texture : s_WhiteTexture;
+                return _texture ? _texture : s_WhiteTexture;
+            }
+        }
 
         public override Material defaultMaterial
         {
@@ -237,14 +319,161 @@ namespace PurrNet.UI
             {
                 if (_sharedMaterial == null && _shader != null)
                     _sharedMaterial = new Material(_shader) { hideFlags = HideFlags.HideAndDontSave };
-                return _sharedMaterial;
+
+                var spriteMaterial = ResolveSpriteMaterial();
+                return spriteMaterial ? spriteMaterial : _sharedMaterial;
             }
+        }
+
+        // The vertex channels are full, so a sprite's atlas rect and borders travel in a material.
+        // Materials are shared by every graphic with the same values, which keeps them batching, and
+        // are never modified after creation because masking keeps its own copies of them.
+        readonly struct SpriteMaterialKey : IEquatable<SpriteMaterialKey>
+        {
+            public readonly Shader shader;
+            public readonly Vector4 outerUV, innerUV, border, padding;
+            public readonly bool relativePadding, fillCenter;
+
+            public SpriteMaterialKey(Shader shader, Vector4 outerUV, Vector4 innerUV, Vector4 border, Vector4 padding, bool relativePadding, bool fillCenter)
+            {
+                this.fillCenter = fillCenter;
+                this.shader = shader;
+                this.outerUV = outerUV;
+                this.innerUV = innerUV;
+                this.border = border;
+                this.padding = padding;
+                this.relativePadding = relativePadding;
+            }
+
+            public bool Equals(SpriteMaterialKey other) =>
+                shader == other.shader && outerUV.Equals(other.outerUV) && innerUV.Equals(other.innerUV) &&
+                border.Equals(other.border) && padding.Equals(other.padding) && relativePadding == other.relativePadding &&
+                fillCenter == other.fillCenter;
+
+            public override bool Equals(object obj) => obj is SpriteMaterialKey other && Equals(other);
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    int hash = outerUV.GetHashCode();
+                    hash = hash * 397 ^ innerUV.GetHashCode();
+                    hash = hash * 397 ^ border.GetHashCode();
+                    hash = hash * 397 ^ padding.GetHashCode();
+                    hash = hash * 397 ^ (fillCenter ? 1 : 0);
+                    return relativePadding ? ~hash : hash;
+                }
+            }
+        }
+
+        sealed class SpriteMaterialEntry
+        {
+            public Material material;
+            public int users;
+        }
+
+        static readonly System.Collections.Generic.Dictionary<SpriteMaterialKey, SpriteMaterialEntry> s_SpriteMaterials =
+            new System.Collections.Generic.Dictionary<SpriteMaterialKey, SpriteMaterialEntry>();
+
+        static readonly int s_SpriteOuterUV = Shader.PropertyToID("_SpriteOuterUV");
+        static readonly int s_SpriteInnerUV = Shader.PropertyToID("_SpriteInnerUV");
+        static readonly int s_SpriteBorder = Shader.PropertyToID("_SpriteBorder");
+        static readonly int s_SpritePadding = Shader.PropertyToID("_SpritePadding");
+        static readonly int s_SpritePaddingRelative = Shader.PropertyToID("_SpritePaddingRelative");
+        static readonly int s_SpriteFillCenter = Shader.PropertyToID("_SpriteFillCenter");
+
+        SpriteMaterialKey _spriteMaterialKey;
+        SpriteMaterialEntry _spriteMaterialEntry;
+
+        Material ResolveSpriteMaterial()
+        {
+            // Released on disable, so only an enabled graphic may hold a share.
+            if (!hasUsableSprite || !_shader || !isActiveAndEnabled)
+            {
+                ReleaseSpriteMaterial();
+                return null;
+            }
+
+            var key = BuildSpriteMaterialKey();
+            if (_spriteMaterialEntry != null && _spriteMaterialEntry.material && _spriteMaterialKey.Equals(key))
+                return _spriteMaterialEntry.material;
+
+            ReleaseSpriteMaterial();
+
+            if (!s_SpriteMaterials.TryGetValue(key, out var entry) || !entry.material)
+            {
+                var created = new Material(_shader) { hideFlags = HideFlags.HideAndDontSave };
+                created.EnableKeyword("PURR_SPRITE");
+                created.SetVector(s_SpriteOuterUV, key.outerUV);
+                created.SetVector(s_SpriteInnerUV, key.innerUV);
+                created.SetVector(s_SpriteBorder, key.border);
+                created.SetVector(s_SpritePadding, key.padding);
+                created.SetFloat(s_SpritePaddingRelative, key.relativePadding ? 1f : 0f);
+                created.SetFloat(s_SpriteFillCenter, key.fillCenter ? 1f : 0f);
+                entry = new SpriteMaterialEntry { material = created };
+                s_SpriteMaterials[key] = entry;
+            }
+
+            entry.users++;
+            _spriteMaterialKey = key;
+            _spriteMaterialEntry = entry;
+            return entry.material;
+        }
+
+        SpriteMaterialKey BuildSpriteMaterialKey()
+        {
+            var outer = UnityEngine.Sprites.DataUtility.GetOuterUV(_sprite);
+            var padding = UnityEngine.Sprites.DataUtility.GetPadding(_sprite);
+            var border = _sprite.border;
+
+            if (_imageType != SpriteImageType.Sliced || border.sqrMagnitude <= 0f)
+            {
+                // Simple, or nothing to slice: the sprite stretches over the rect, so its padding scales with it.
+                var size = _sprite.rect.size;
+                padding = new Vector4(padding.x / size.x, padding.y / size.y, padding.z / size.x, padding.w / size.y);
+                return new SpriteMaterialKey(_shader, outer, outer, Vector4.zero, padding, true, true);
+            }
+
+            // Same border scale as UI.Image: sprite pixels to canvas units.
+            float referencePixelsPerUnit = canvas ? canvas.referencePixelsPerUnit : 100f;
+            float pixelsPerUnit = _sprite.pixelsPerUnit / referencePixelsPerUnit * Mathf.Max(0.01f, _pixelsPerUnitMultiplier);
+            float toRect = pixelsPerUnit > 0f ? 1f / pixelsPerUnit : 1f;
+
+            var inner = UnityEngine.Sprites.DataUtility.GetInnerUV(_sprite);
+            return new SpriteMaterialKey(_shader, outer, inner, border * toRect, padding * toRect, false, _fillCenter);
+        }
+
+        void ReleaseSpriteMaterial()
+        {
+            var entry = _spriteMaterialEntry;
+            if (entry == null)
+                return;
+
+            _spriteMaterialEntry = null;
+            if (--entry.users > 0)
+                return;
+
+            if (s_SpriteMaterials.TryGetValue(_spriteMaterialKey, out var current) && current == entry)
+                s_SpriteMaterials.Remove(_spriteMaterialKey);
+
+            if (!entry.material)
+                return;
+            if (Application.isPlaying)
+                Destroy(entry.material);
+            else
+                DestroyImmediate(entry.material);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             Refresh();
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            ReleaseSpriteMaterial();
         }
 
         protected override void OnCanvasHierarchyChanged()

@@ -15,6 +15,11 @@ namespace PurrNet.Editor.UI
 
         // Graphic
         SerializedProperty _texture;
+        SerializedProperty _sprite;
+        SerializedProperty _pixelsPerUnitMultiplier;
+        SerializedProperty _imageType;
+        SerializedProperty _imageSource;
+        SerializedProperty _fillCenter;
         SerializedProperty _graphicColor;
         SerializedProperty _gradientType;
         SerializedProperty _gradientColor;
@@ -59,6 +64,11 @@ namespace PurrNet.Editor.UI
             _roundnessInPixels = serializedObject.FindProperty("_roundnessInPixels");
 
             _texture = serializedObject.FindProperty("_texture");
+            _sprite = serializedObject.FindProperty("_sprite");
+            _pixelsPerUnitMultiplier = serializedObject.FindProperty("_pixelsPerUnitMultiplier");
+            _imageType = serializedObject.FindProperty("_imageType");
+            _imageSource = serializedObject.FindProperty("_imageSource");
+            _fillCenter = serializedObject.FindProperty("_fillCenter");
             _graphicColor = serializedObject.FindProperty("_graphicColor");
             _gradientType = serializedObject.FindProperty("_gradientType");
             _gradientColor = serializedObject.FindProperty("_gradientColor");
@@ -95,9 +105,13 @@ namespace PurrNet.Editor.UI
         {
             serializedObject.Update();
 
+            // Image
+            BeginSection("Image");
+            DrawImageSection();
+            EndSection();
+
             // Color
             BeginSection("Color");
-            EditorGUILayout.PropertyField(_texture);
             EditorGUILayout.PropertyField(_graphicColor, new GUIContent("Color"));
             EditorGUILayout.PropertyField(_gradientType, new GUIContent("Gradient"));
 
@@ -221,6 +235,73 @@ namespace PurrNet.Editor.UI
                     EditorUtility.SetDirty(graphic);
                 }
             }
+        }
+
+        static readonly string[] s_ImageSourceLabels = { "Texture", "Sprite" };
+
+        // Source is stored on the component, so the texture and the sprite both stay assigned and
+        // only the one that is drawn is shown. The sprite settings mirror UI.Image.
+        void DrawImageSection()
+        {
+            bool mixed = _imageSource.hasMultipleDifferentValues;
+
+            var rect = EditorGUI.PrefixLabel(EditorGUILayout.GetControlRect(), new GUIContent("Source"));
+            EditorGUI.BeginChangeCheck();
+            int picked = GUI.Toolbar(rect, mixed ? -1 : _imageSource.enumValueIndex, s_ImageSourceLabels, EditorStyles.miniButton);
+            if (EditorGUI.EndChangeCheck() && picked >= 0)
+            {
+                _imageSource.enumValueIndex = picked;
+                mixed = false;
+            }
+
+            if (mixed)
+            {
+                EditorGUILayout.LabelField("The selected graphics use different sources. Pick one to apply it to all of them.",
+                    EditorStyles.wordWrappedMiniLabel);
+                return;
+            }
+
+            var source = (ImageSource)_imageSource.enumValueIndex;
+            var sprite = _sprite.hasMultipleDifferentValues ? null : _sprite.objectReferenceValue as Sprite;
+
+            if (source == ImageSource.Texture)
+            {
+                EditorGUILayout.PropertyField(_texture);
+                return;
+            }
+
+            EditorGUILayout.PropertyField(_sprite, new GUIContent("Source Image"));
+            if (!sprite && !_sprite.hasMultipleDifferentValues)
+                return;
+
+            EditorGUILayout.PropertyField(_imageType);
+
+            bool sliced = !_imageType.hasMultipleDifferentValues &&
+                          _imageType.enumValueIndex == (int)SpriteImageType.Sliced;
+            if (sliced)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_fillCenter);
+                EditorGUILayout.PropertyField(_pixelsPerUnitMultiplier);
+                EditorGUI.indentLevel--;
+            }
+
+            // Different sprites are selected: the settings above apply to all, the checks below to none.
+            if (!sprite)
+                return;
+
+            if (sliced)
+            {
+                if (sprite.border.sqrMagnitude <= 0f)
+                    EditorGUILayout.HelpBox("This sprite has no borders, so it is drawn as Simple. Set borders in the Sprite Editor to slice it.", MessageType.Warning);
+                else if (sprite.texture && sprite.texture.mipmapCount > 1)
+                    EditorGUILayout.HelpBox("The sprite's texture has mipmaps, which can show a thin seam along the slice borders. Turn off Generate Mipmaps on the texture to avoid it.", MessageType.Warning);
+            }
+
+            if (!sprite.texture)
+                EditorGUILayout.HelpBox("This sprite's texture is not loaded yet (its atlas may be unavailable), so nothing is drawn from it until it is.", MessageType.Warning);
+            else if (sprite.packed && (sprite.packingMode == SpritePackingMode.Tight || sprite.packingRotation != SpritePackingRotation.None))
+                EditorGUILayout.HelpBox("This sprite is packed tightly or rotated in its atlas, which rectangle graphics cannot draw correctly. Use rectangle packing without rotation.", MessageType.Warning);
         }
 
         static GUIStyle _sectionStyle;
