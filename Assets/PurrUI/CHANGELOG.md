@@ -1,3 +1,24 @@
+# [1.7.0-beta.1](https://github.com/PurrNet/PurrUI/compare/v1.6.1-beta.2...v1.7.0-beta.1) (2026-11-15)
+
+
+### Features
+
+* rectangle graphics can draw a sprite, nine-sliced by its borders like a UI Image ([f39e17f](https://github.com/PurrNet/PurrUI/commit/f39e17f4705d9d60c8e7ce79c43b4de74c67b62c))
+
+## [1.6.1-beta.2](https://github.com/PurrNet/PurrUI/compare/v1.6.1-beta.1...v1.6.1-beta.2) (2026-11-12)
+
+
+### Bug Fixes
+
+* the Material icon font builds its atlas at runtime from the icons in use, instead of adding a 16 MB atlas to every build ([e92b903](https://github.com/PurrNet/PurrUI/commit/e92b9039da92c6cedd59d2417321cc977e1b9063))
+
+## [1.6.1-beta.1](https://github.com/PurrNet/PurrUI/compare/v1.6.0...v1.6.1-beta.1) (2026-10-10)
+
+
+### Bug Fixes
+
+* drop the prefab-stage refresher's extra ForceUpdateCanvases ([98a8eb6](https://github.com/PurrNet/PurrUI/commit/98a8eb6d6a9f4ca8b9eaaa349ebd29a30c70158c))
+
 # [1.6.0](https://github.com/PurrNet/PurrUI/compare/v1.5.2...v1.6.0) (2026-09-21)
 
 

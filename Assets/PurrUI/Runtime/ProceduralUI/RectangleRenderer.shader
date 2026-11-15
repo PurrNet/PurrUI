@@ -14,6 +14,14 @@ Shader "Hidden/PurrUI/RectangleRenderer"
         _ColorMask ("Color Mask", Float) = 15
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
+
+        // Sprite mode only (PURR_SPRITE). Declared here so material copies made for masking keep them.
+        [HideInInspector] _SpriteOuterUV ("Sprite Outer UV", Vector) = (0,0,1,1)
+        [HideInInspector] _SpriteInnerUV ("Sprite Inner UV", Vector) = (0,0,1,1)
+        [HideInInspector] _SpriteBorder ("Sprite Border", Vector) = (0,0,0,0)
+        [HideInInspector] _SpritePadding ("Sprite Padding", Vector) = (0,0,0,0)
+        [HideInInspector] _SpritePaddingRelative ("Sprite Padding Relative", Float) = 0
+        [HideInInspector] _SpriteFillCenter ("Sprite Fill Center", Float) = 1
     }
 
     SubShader
@@ -55,6 +63,9 @@ Shader "Hidden/PurrUI/RectangleRenderer"
 
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
+            // multi_compile, not shader_feature: the sprite materials are created at runtime, so a
+            // shader_feature variant would be stripped from player builds.
+            #pragma multi_compile_local _ PURR_SPRITE
 
             // Vertex attributes packed by OnPopulateMesh:
             //   uv0: texU, texV, width, height
@@ -64,6 +75,8 @@ Shader "Hidden/PurrUI/RectangleRenderer"
             //        encodedShadowPow: shadowPow + round(frameWidth)*256
             //   uv3: packedOutlineColor (xy), packedShadowColor (zw)
             //   color: graphicColor * Graphic.color
+            // Sprite mode keeps this layout and reads the sprite's atlas rect and borders from the
+            // material instead, so the plain path and its vertex data are untouched.
 
             struct appdata
             {
@@ -164,6 +177,49 @@ Shader "Hidden/PurrUI/RectangleRenderer"
                 return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r.x;
             }
 
+            #ifdef PURR_SPRITE
+            float4 _SpriteOuterUV;      // atlas rect of the sprite (xMin, yMin, xMax, yMax)
+            float4 _SpriteInnerUV;      // atlas rect of the stretched centre
+            float4 _SpriteBorder;       // left, bottom, right, top in rect pixels
+            float4 _SpritePadding;      // trimmed transparent edge: rect pixels, or a fraction of the rect
+            float _SpritePaddingRelative;
+            float _SpriteFillCenter;    // 0 leaves the centre of a nine-sliced sprite empty
+
+            // Maps a position in the rect to the sprite's atlas UV, stretching only the centre of a
+            // nine-sliced sprite. mask is 0 over the sprite's trimmed transparent padding.
+            float2 SpriteUV(float2 rectUV, float2 size, out float mask)
+            {
+                float2 p = rectUV * size;
+
+                float4 pad = lerp(_SpritePadding, _SpritePadding * size.xyxy, _SpritePaddingRelative);
+                float2 lo = pad.xy;
+                float2 hi = size - pad.zw;
+
+                // Borders that do not fit the rect shrink evenly, like UI.Image does.
+                float4 border = _SpriteBorder;
+                float2 borderScale = min(1.0, size / max(border.xy + border.zw, 0.0001));
+                border *= borderScale.xyxy;
+
+                float2 b0 = clamp(border.xy, lo, hi);
+                float2 b1 = clamp(size - border.zw, b0, hi);
+
+                float2 uvA = lerp(_SpriteOuterUV.xy, _SpriteInnerUV.xy, saturate((p - lo) / max(b0 - lo, 0.0001)));
+                float2 uvB = lerp(_SpriteInnerUV.xy, _SpriteInnerUV.zw, saturate((p - b0) / max(b1 - b0, 0.0001)));
+                float2 uvC = lerp(_SpriteInnerUV.zw, _SpriteOuterUV.zw, saturate((p - b1) / max(hi - b1, 0.0001)));
+
+                // Without padding the texture clamps past the rect edge, so the antialiased edge and
+                // an outside frame keep their colour.
+                float2 inLo = max(step(lo, p), step(pad.xy, 0.0));
+                float2 inHi = max(step(p, hi), step(pad.zw, 0.0));
+                mask = inLo.x * inLo.y * inHi.x * inHi.y;
+
+                float2 inCentre = step(b0, p) * step(p, b1);
+                mask *= 1.0 - inCentre.x * inCentre.y * (1.0 - _SpriteFillCenter);
+
+                return lerp(uvA, lerp(uvB, uvC, step(b1, p)), step(b0, p));
+            }
+            #endif
+
             fixed4 frag(v2f IN) : SV_Target
             {
                 float2 halfSize = IN.params.xy;
@@ -198,7 +254,14 @@ Shader "Hidden/PurrUI/RectangleRenderer"
                     shadowPow = IN.params2.y;
                 }
 
+                #ifdef PURR_SPRITE
+                float spriteMask;
+                float2 spriteUV = SpriteUV(IN.texAndSdf.xy, halfSize * 2.0, spriteMask);
+                half4 graphic = tex2D(_MainTex, spriteUV) + _TextureSampleAdd;
+                graphic.a *= spriteMask;
+                #else
                 half4 graphic = tex2D(_MainTex, IN.texAndSdf.xy) + _TextureSampleAdd;
+                #endif
 
                 float dist = sdRoundedBox(IN.texAndSdf.zw, halfSize, IN.roundness);
 

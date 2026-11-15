@@ -83,10 +83,12 @@ namespace PurrNet.Editor.UI
             foreach (var glowModifier in root.GetComponentsInChildren<GlowModifier>(true))
                 glowModifier.Refresh();
 
+            // Refresh() queues each graphic for SignedDistanceFieldGraphic's shared editor flush, which
+            // forces one canvas update for all of them; forcing another here only doubled the cost. This
+            // runs on every hierarchyChanged while a prefab stage is open, so it adds up quickly.
             foreach (var graphic in root.GetComponentsInChildren<SignedDistanceFieldGraphic>(true))
                 graphic.Refresh();
 
-            Canvas.ForceUpdateCanvases();
             SceneView.RepaintAll();
         }
     }
